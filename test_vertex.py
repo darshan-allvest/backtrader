@@ -1,5 +1,6 @@
 import os
 from google import genai
+import json
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./vertex_key.json"
 
@@ -9,18 +10,24 @@ client = genai.Client(
     location="us-central1"
 )
 
-news = "D Pinaults Sell Puma Stake to China’s Anta for $1.8 Billion (1) BN 13:48"
+news = "Pinaults Sell Puma Stake to China’s Anta for $1.8 Billion"
 
 prompt = f"""
-vNorth Korea Fires Suspected Missile as US Signals Defense Shift BN 13:26
+You are a financial sentiment analysis model.
 
-Return ONLY JSON.
+Analyze the sentiment of the following financial news headline.
+
+Rules:
+1 = positive
+0 = neutral
+-1 = negative
+
+Return ONLY valid JSON.
 
 Format:
 {{
 "sentiment": -1 | 0 | 1,
-"confidence": 0-1,
-"score": sentiment * confidence
+"confidence": 0-1
 }}
 
 News:
@@ -33,3 +40,12 @@ response = client.models.generate_content(
 )
 
 print(response.text)
+
+# CLEAN RESPONSE
+clean_text = response.text.strip().replace("```json", "").replace("```", "")
+
+data = json.loads(clean_text)
+
+score = data["sentiment"] * data["confidence"]
+
+print("Score:", score)
