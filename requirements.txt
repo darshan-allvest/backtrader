@@ -1,3 +1,4 @@
 backtrader
 pandas
 matplotlib
+google-genai

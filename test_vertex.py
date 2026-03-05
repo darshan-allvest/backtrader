@@ -1,7 +1,7 @@
 import os
 from google import genai
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/Users/darshangada/Desktop/backtrader/vertex_key.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./vertex_key.json"
 
 client = genai.Client(
     vertexai=True,
@@ -12,14 +12,15 @@ client = genai.Client(
 news = "D Pinaults Sell Puma Stake to China’s Anta for $1.8 Billion (1) BN 13:48"
 
 prompt = f"""
-You are a financial sentiment analysis model.
+vNorth Korea Fires Suspected Missile as US Signals Defense Shift BN 13:26
 
 Return ONLY JSON.
 
 Format:
 {{
 "sentiment": -1 | 0 | 1,
-"confidence": 0-1
+"confidence": 0-1,
+"score": sentiment * confidence
 }}
 
 News:
